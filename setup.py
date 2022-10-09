@@ -1,10 +1,10 @@
 from setuptools import setup
-from pip.req import parse_requirements
+import os
 
 def requirements():
-    install_requirements = parse_requirements('requirements.txt')
-    requirements = [str(ir.req) for ir in install_requirements]
-    return requirements
+    with open('requirements.txt') as file:
+        required = file.read().splitlines()
+        return required
 setup(
     name='SensorInterfaces',
     version='0.0.0',    
