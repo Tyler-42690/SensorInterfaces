@@ -1,6 +1,8 @@
 import os
 import glob
 import time
+import serial
+
 class Sensor():
     def __init__(self) -> None:
         '''Constructor for Overall Sensor Class'''
@@ -16,13 +18,26 @@ class Sensor():
 class PHSensor(Sensor):
     def __init__(self) -> None:
         super(self)
+        self.port = serial.Serial("/dev/ttyAMA0",baudrate=9600, timeout=1.0)
         pass
 
     def get_measurement_raw(self):
         pass
 
+    def get_measurement(self):
+        counter = 10
+        for i in range(counter):
+            rcv = self.port.readLine()
+            if len(rcv) > 4:
+                stuck = True
+                break
+        else:
+            counter += 1
+        while stuck:
+            measurement = rcv.split(',')
+            stuck = False
+            return float(measurement[0].split(':'))
 class TempSensor(Sensor):
-    
     def __init__(self) -> None:
         super(self)
         os.system('modprobe w1-gpio')
