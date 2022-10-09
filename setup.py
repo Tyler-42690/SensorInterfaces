@@ -13,7 +13,7 @@ setup(
     author='Tyler Casas',
     author_email='sharknado8575@gmail.com',
     license='',
-    packages=['SensorInterfaces'],
+    packages=['Sensors'],
     install_requires=requirements(),
 
     classifiers=[
