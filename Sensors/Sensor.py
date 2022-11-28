@@ -2,6 +2,12 @@ import os
 import glob
 import time
 import serial
+import time
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
+
 
 class Sensor():
     def __init__(self) -> None:
@@ -63,3 +69,30 @@ class TempSensor(Sensor):
             temp_celsius = float(temp_string)/1000.0
             temp_fahrenheit = temp_celsius*9.0/5.0+32.0
             return temp_celsius, temp_fahrenheit
+
+class ConductivitySensor(Sensor):
+    def __init__(self):
+        # Create the I2C bus
+        self.i2c = busio.I2C(board.SCL, board.SDA)
+
+        # Create the ADC object using the I2C bus
+        self.ads = ADS.ADS1115(self.i2c)
+
+        # Create single-ended input on channel 0
+        self.chan = AnalogIn(self.ads, ADS.P1)
+
+
+        # Create differential input between channel 0 and 1
+        #chan = AnalogIn(ads, ADS.P0, ADS.P1)
+
+    def get_measurement_raw(self):
+        return super().get_measurement_raw()
+    
+    def get_measurement(self):
+        print("{:>5}\t{:>5}".format('raw', 'v'))
+
+        while True:
+            voltage = self.chan.voltage
+            tdsValue=(477.79*self.chan.voltage-2.53)
+            print(tdsValue)
+            time.sleep(0.5)
