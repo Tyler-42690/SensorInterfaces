@@ -1,5 +1,3 @@
-#!/usr/bin/python
-''' Raspberry Pi, ADS1115, PH4502C Calibration '''
 import board
 import busio
 import time
